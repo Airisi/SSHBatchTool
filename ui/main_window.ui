@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>800</width>
+                <height>500</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>SSH Batch Upgrade Tool v1.0</string>
+        </property>
+        <property name="styleSheet">
+            <string>
+                QMainWindow {
+<!--                background-color: #f3f3f3;-->
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                }
+                QWidget {
+                font-family: "Segoe UI", sans-serif;
+                font-size: 12px;
+                }
+                QPushButton {
+                background-color: rgba(255, 255, 255, 0.7);
+                color: rgba(0, 0, 0, 0.7);
+                border: 1px solid rgba(204, 204, 204, 0.7);
+                border-radius: 4px;
+                padding: 5px 10px;
+                font-weight: 400;
+                }
+                QPushButton:hover {
+                background-color: rgba(249, 249, 249, 0.3);
+                border: 1px solid rgba(0, 120, 215, 0.3);
+                }
+                QPushButton:pressed {
+                background-color: rgba(0, 120, 215, 0.3);
+                color: rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(0, 120, 215, 0.3);
+                }
+                QPushButton:disabled {
+                background-color: rgba(249, 249, 249, 0.1);
+                color: rgba(160, 160, 160, 0.7);
+                border-color: rgba(204, 204, 204, 0.7);
+                }
+                QLineEdit {
+                background-color: rgba(255, 255, 255, 0.7);
+                border: 1px solid rgba(204, 204, 204, 0.7);
+                border-radius: 4px;
+                padding: 5px;
+                color: rgba(0, 0, 0, 0.7);
+                }
+                QLineEdit:focus {
+                border-color: rgba(0, 103, 192, 0.7);
+                }
+                QTableWidget {
+                border: 1px solid rgba(204, 204, 204, 0.7);
+                border-bottom: none;
+                background-color: rgba(255, 255, 255, 0.7);
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+                color: rgba(0, 0, 0, 0.7);
+                }
+                QHeaderView::section {
+                background-color: rgba(243, 243, 243, 0.7);
+                color: rgba(0, 0, 0, 0.7);
+                padding: 5px;
+                border: none;
+                border-right: 1px solid rgba(204, 204, 204, 0.7);
+                border-bottom: 1px solid rgba(204, 204, 204, 0.7);
+                font-weight: 600;
+                }
+                QTableWidget::item {
+                padding: 5px;
+                }
+                QTableWidget::item:selected {
+                background-color: rgba(229, 241, 251, 0.7);
+                color: rgba(0, 0, 0, 0.7);
+                }
+                QLabel {
+                color: rgba(0, 0, 0, 0.7);
+                }
+                QProgressBar {
+                border: none;
+                border-radius: 0;
+                background-color: rgba(204, 204, 204, 0.1);
+                text-align: center;
+                height: 2px;
+                }
+                QProgressBar::chunk {
+                background-color: rgba(0, 103, 192, 0.7);
+                }
+                QTableWidget QPushButton {
+                background-color: transparent;
+                border: none;
+                padding: 0;
+                font-weight: bold;
+                color: rgba(0, 103, 192, 0.7);
+                }
+                QTableWidget QPushButton:pressed {
+                color: rgba(0, 76, 140, 0.7);
+                }
+                QTableWidget::item:hover {
+                background-color: rgba(240, 248, 255, 0.7);
+                }
+            </string>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QVBoxLayout" name="verticalLayout">
+                <property name="spacing">
+                    <number>10</number>
+                </property>
+                <property name="margin">
+                    <number>20</number>
+                </property>
+                <item>
+                    <layout class="QGridLayout" name="gridLayout">
+                        <property name="horizontalSpacing">
+                            <number>10</number>
+                        </property>
+                        <property name="verticalSpacing">
+                            <number>10</number>
+                        </property>
+                        <item row="0" column="0">
+                            <widget class="QLabel" name="hostLabel">
+                                <property name="text">
+                                    <string>Host:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="0" column="1">
+                            <widget class="QLineEdit" name="hostEntry">
+                                <property name="placeholderText">
+                                    <string>Enter host address</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="0" column="2">
+                            <widget class="QLabel" name="usernameLabel">
+                                <property name="text">
+                                    <string>Username:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="0" column="3">
+                            <widget class="QLineEdit" name="usernameEntry">
+                                <property name="placeholderText">
+                                    <string>Enter username</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="0" column="4">
+                            <widget class="QLabel" name="passwordLabel">
+                                <property name="text">
+                                    <string>Password:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="0" column="5">
+                            <widget class="QLineEdit" name="passwordEntry">
+                                <property name="placeholderText">
+                                    <string>Enter password</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="0" column="6">
+                            <widget class="QPushButton" name="addUpgradeTaskButton">
+                                <property name="text">
+                                    <string>Add Config</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="1" column="0">
+                            <widget class="QLabel" name="upgradeFileLabel">
+                                <property name="text">
+                                    <string>Upgrade File:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="1" column="1" colspan="5">
+                            <widget class="QLineEdit" name="upgradeFileEntry">
+                                <property name="placeholderText">
+                                    <string>Select upgrade file</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="1" column="6" colspan="1">
+                            <widget class="QPushButton" name="upgradeFileButton">
+                                <property name="text">
+                                    <string>Select File</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="2" column="0">
+                            <widget class="QLabel" name="upgradeScriptLabel">
+                                <property name="text">
+                                    <string>Upgrade Script:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="2" column="1" colspan="5">
+                            <widget class="QLineEdit" name="upgradeScriptEntry">
+                                <property name="placeholderText">
+                                    <string>Select upgrade script</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="2" column="6" colspan="1">
+                            <widget class="QPushButton" name="upgradeScriptButton">
+                                <property name="text">
+                                    <string>Select File</string>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </item>
+                <item>
+                    <layout class="QVBoxLayout" name="tableLayout">
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <item>
+                            <widget class="QTableWidget" name="upgradeTasksTable"/>
+                        </item>
+                        <item>
+                            <widget class="QProgressBar" name="overallProgressBar">
+                                <property name="maximum">
+                                    <number>100</number>
+                                </property>
+                                <property name="value">
+                                    <number>0</number>
+                                </property>
+                                <property name="textVisible">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </item>
+                <item>
+                    <layout class="QHBoxLayout" name="upgradeAllLayout">
+                        <item>
+                            <widget class="QPushButton" name="upgradeAllHostsButton">
+                                <property name="text">
+                                    <string>Upgrade All</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="clearTasksButton">
+                                <property name="text">
+                                    <string>Clear All</string>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </item>
+                <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_2">
+                        <item>
+                            <widget class="QPushButton" name="importButton">
+                                <property name="text">
+                                    <string>Import Config</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="exportButton">
+                                <property name="text">
+                                    <string>Export Config</string>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </item>
+            </layout>
+        </widget>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>
