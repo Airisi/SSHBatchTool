@@ -107,6 +107,23 @@
                 QTableWidget::item:hover {
                 background-color: rgba(240, 248, 255, 0.7);
                 }
+                QTableWidget QLineEdit {
+                background-color: rgba(255, 255, 255, 0.95);
+                color: #202020;
+                border: 1px solid rgba(0, 120, 215, 0.4);
+                border-radius: 4px;
+                padding: 2px 4px;
+                margin: 1px;
+                font-size: 11px;
+                }
+                QTableWidget QLineEdit:focus {
+                background-color: white;
+                border: 1px solid rgba(0, 120, 215, 0.7);
+                }
+                QTableWidget QLineEdit:hover {
+                background-color: rgba(255, 255, 255, 1);
+                border: 1px solid rgba(0, 120, 215, 0.6);
+                }
             </string>
         </property>
         <widget class="QWidget" name="centralwidget">

@@ -6,7 +6,7 @@ import asyncio
 from PyQt5 import uic
 from PyQt5.QtGui import QColor, QPalette, QBrush, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidgetItem, QPushButton, \
-     QFileDialog
+    QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal, QFileInfo, QByteArray, QTimer, Qt
 from ssh_manager import SSHManager
 from upgrade_manager import UpgradeManager
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow):
         self.overallProgressBar.setFixedHeight(2)  # 设置进度条高度为2像素
 
     def setup_connections(self):
-        self.addUpgradeTaskButton.clicked.connect(self.add_ssh_config)
+        self.addUpgradeTaskButton.clicked.connect(self.add_upgrade_task)
         self.upgradeAllHostsButton.clicked.connect(self.upgrade_all)
         self.upgradeFileButton.clicked.connect(self.select_upgrade_file)
         self.upgradeScriptButton.clicked.connect(self.select_upgrade_script)
@@ -171,7 +171,7 @@ class MainWindow(QMainWindow):
             self.upgradeScriptEntry.setText(file_path)
             self.save_last_opened_dir(file_path)
 
-    def add_upgrade_task(self, host, username, password):
+    def add_upgrade_task_row(self, host, username, password):
         """
         添加新的升级任务。
         """
@@ -191,7 +191,7 @@ class MainWindow(QMainWindow):
         delete_button.setStyleSheet("color: #d32f2f;")
         self.upgradeTasksTable.setCellWidget(row_position, 6, delete_button)
 
-    def add_ssh_config(self):
+    def add_upgrade_task(self):
         """
         添加新的SSH配置。
         """
@@ -199,16 +199,32 @@ class MainWindow(QMainWindow):
         username = self.usernameEntry.text()
         password = self.passwordEntry.text()
         if host and username and password:
-            self.add_upgrade_task(QTableWidgetItem(host),
-                                  QTableWidgetItem(username),
-                                  QTableWidgetItem(password))
+            self.add_upgrade_task_row(QTableWidgetItem(host),
+                                      QTableWidgetItem(username),
+                                      QTableWidgetItem(password))
         self.update_task_count()
+        self.check_and_update_progress_bar_color()
 
     def remove_upgrade_task(self, row):
         """
         删除指定的升级任务。
         """
         self.upgradeTasksTable.removeRow(row)
+
+        # 更新 upgrade_progresses 和 upgrade_statuses
+        del self.upgrade_progresses[row]
+        del self.upgrade_statuses[row]
+
+        # 重新编号剩余的任务
+        new_progresses = {}
+        new_statuses = {}
+        for i, (old_row, progress) in enumerate(sorted(self.upgrade_progresses.items())):
+            new_progresses[i] = progress
+            new_statuses[i] = self.upgrade_statuses[old_row]
+
+        self.upgrade_progresses = new_progresses
+        self.upgrade_statuses = new_statuses
+
         # 更新所有升级和删除按钮的lambda函数
         for i in range(self.upgradeTasksTable.rowCount()):
             upgrade_button = self.upgradeTasksTable.cellWidget(i, 5)
@@ -219,8 +235,9 @@ class MainWindow(QMainWindow):
             delete_button.clicked.disconnect()
             delete_button.clicked.connect(lambda _, r=i: self.remove_upgrade_task(r))
 
-        # 更新任务数量
+        self.upgradeTasksTable.setCurrentItem(None)
         self.update_task_count()
+        self.check_and_update_progress_bar_color()
 
     def update_task_count(self):
         """
@@ -230,7 +247,7 @@ class MainWindow(QMainWindow):
         self.total_tasks = task_count
         new_progresses = {row: self.upgrade_progresses.get(row, 0) for row in range(task_count)}
         self.upgrade_progresses = new_progresses
-        new_statuses = {row: self.upgrade_statuses.get(row, "") for row in range(task_count)}
+        new_statuses = {row: self.upgrade_statuses.get(row, "default") for row in range(task_count)}
         self.upgrade_statuses = new_statuses
         self.update_overall_progress()  # 更新任务数量后，更新总体进度
 
@@ -310,7 +327,7 @@ class MainWindow(QMainWindow):
         self.reset_progress_bar_color()
         self.total_tasks = self.upgradeTasksTable.rowCount()
         self.upgrade_progresses = {row: 0 for row in range(self.total_tasks)}
-        self.upgrade_statuses = {row: "" for row in range(self.total_tasks)}
+        self.upgrade_statuses = {row: "default" for row in range(self.total_tasks)}
         for row in range(self.total_tasks):
             self.upgrade_host(row)
 
@@ -540,9 +557,9 @@ class MainWindow(QMainWindow):
                 self.upgradeTasksTable.setRowCount(0)  # 清空表格
 
                 for index, row in df.iterrows():
-                    self.add_upgrade_task(QTableWidgetItem(row['Host']),
-                                          QTableWidgetItem(row['Username']),
-                                          QTableWidgetItem(row['Password']))
+                    self.add_upgrade_task_row(QTableWidgetItem(row['Host']),
+                                              QTableWidgetItem(row['Username']),
+                                              QTableWidgetItem(row['Password']))
                 self.update_task_count()
                 self.save_last_opened_dir(file_path)
             except pd.errors.EmptyDataError:
@@ -655,9 +672,9 @@ class MainWindow(QMainWindow):
                     self.upgradeTasksTable.setColumnWidth(int(col), width)
 
                 for ssh_config in ssh_configs:
-                    self.add_upgrade_task(QTableWidgetItem(ssh_config.get('Host', '')),
-                                          QTableWidgetItem(ssh_config.get('Username', '')),
-                                          QTableWidgetItem(ssh_config.get('Password', '')))
+                    self.add_upgrade_task_row(QTableWidgetItem(ssh_config.get('Host', '')),
+                                              QTableWidgetItem(ssh_config.get('Username', '')),
+                                              QTableWidgetItem(ssh_config.get('Password', '')))
                 self.update_task_count()
 
         except FileNotFoundError:
